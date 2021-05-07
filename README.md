@@ -42,7 +42,6 @@ Les fonctionnalités sont testées et nous avons vérifié si elles étaient sca
 
 - Visualiser le top100 pétitions les plus signées :
 
- ![top100](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/top100.png) 
 
 *Fonctionnalités non opérationnels :*
 
