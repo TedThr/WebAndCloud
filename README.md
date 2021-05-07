@@ -32,11 +32,11 @@ Créer une pétition :
 Visualiser les pétitions créées : 
 
 Signer une pétition : 
- ![SignerPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/SignerPet.png) 
+ ![SignerPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/signerPet.png) 
 
 
 Visualiser les pétitions signées :
- ![SignedPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/SignedPet.png) 
+ ![SignedPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/signedPet.png) 
 
 
 Visualiser le top100 pétitions les plus signées :
@@ -85,10 +85,10 @@ Page de connexion: cliquer sur le bouton connexion puis renseigner votre mail
 
   Page d’accueil : arrivé à la page d'accueil, les fonctionnalités sur la barre de tache en fond noirs et avec une propositions des 4 pétitions les plus signés comme premier titre, les 4 pétitions les moins signés, les 4 dernières pétitions et enfin les 4 pétitions les plus anciennes.
 
- ![paggAcc1](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/paggAcc1.png) 
- ![paggAcc2](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/paggAcc2.png) 
- ![paggAcc3](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/paggAcc3.png) 
- ![paggAcc4](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/paggAcc4.png)
+ ![pageAcc1](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pageAcc1.png) 
+ ![pageAcc2](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pageAcc2.png) 
+ ![pageAcc3](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pageAcc3.png) 
+ ![pageAcc4](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pageAcc4.png)
 
 
 
