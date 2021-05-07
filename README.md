@@ -96,7 +96,7 @@ Page de connexion: cliquer sur le bouton connexion puis renseigner votre mail
 
 Créer une pétition : cliquer sur le bouton “ créer une pétition” , cette page s’affiche puis renseigner les champs puis cliquer sur créer.
 
- ![pageCreerPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pageCreerPet.png) 
+ ![pageCreerPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pageCreer.png) 
 
 Mes pétitions : cliquer sur le bouton “Mes pétitions" pour visualiser les pétitions créées.
 
@@ -105,7 +105,7 @@ Mes pétitions : cliquer sur le bouton “Mes pétitions" pour visualiser les p�
 Mes signatures : cliquer sur “Mes signatures” pour visualiser les signatures des pétitions.
 
 
- ![pageMySigned](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pageMySigned.png)
+ ![pageMySigned](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pagesMesSigned.png)
 
 
 
@@ -114,4 +114,4 @@ Mes signatures : cliquer sur “Mes signatures” pour visualiser les signatures
 Top 100 : cliquer sur Top100 pour visualiser les top 100 des pétitions les plus signées avec la date de création renseignée.
 
 
- ![pageTop100](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/pageTop100.png)
+ ![pageTop100](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/PageTop100.png)
