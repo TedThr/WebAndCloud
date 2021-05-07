@@ -30,7 +30,7 @@ Les fonctionnalités sont testées et nous avons vérifié si elles étaient sca
 
 - Visualiser les pétitions créées :
 
- ![VisuPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/visuPet.png) 
+ ![VisuPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/visuCreate.png) 
 
 - Signer une pétition :
 
@@ -38,7 +38,7 @@ Les fonctionnalités sont testées et nous avons vérifié si elles étaient sca
 
 - Visualiser les pétitions signées :
 
- ![SignedPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/signedPet.png) 
+ ![SignedPet](https://github.com/TedThr/WebAndCloud/blob/main/imgReadme/visuSigned.png) 
 
 - Visualiser le top100 pétitions les plus signées :
 
