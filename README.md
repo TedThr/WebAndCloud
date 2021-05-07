@@ -27,7 +27,7 @@ Fonctionnalités opérationnels :
   Les fonctionnalités sont testées et nous avons vérifié si elles étaient scalables. Nous visons au maximum un temps inférieur à 500ms. Voici nos résultats : 
 
 Créer une pétition : 
- ![CréerPet](http://lmsotfy.com/so.png) 
+ ![CréerPet](https://github.com/TedThr/WebAndCloud/edit/main/imgReadme/creerPet.png) 
 
 Visualiser les pétitions créées : 
 
