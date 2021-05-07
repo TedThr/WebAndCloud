@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Tiny Petition</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+	
+		<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+	<script src="https://unpkg.com/mithril/mithril.js"></script>
+	<meta name="google-signin-scope" content="profile email">
+	<meta name="google-signin-client_id" content="228791443561-vp108vrph2p73bvurv35h03ohff9c6kv.apps.googleusercontent.com">
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+	
+	<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  width: 100%;
+
+}
+
+li {
+  float: left;
+}
+
+li div {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li div:hover {
+  background-color: #111;
+}
+
+body{
+    font-family: Roboto, 'Courier New', Courier, monospace;
+}
+div form {
+  float: right;
+  display : inline-block;
+  padding: 6px;
+  border: none;
+  margin-top: 8px;
+  margin-right: 16px;
+  font-size: 17px;
+  width: 15%;
+}
+
+	</style>
+
+</head>
+<body>
+<script>	
+
+ 
+var Petition = {
+		ID:"",
+		nextToken:"",
+		listTop4: [],
+		listLast4: [],
+		listNew4: [],
+		listOld4: [],
+	    listtop100: [],
+	    listVotants: [],
+	    listMesPetitions: [],
+	    titre: '',
+	    description: '',
+	    currentUser: '',
+	    tags: '',
+	    searchResult: [],
+	    id: '',
+	    searchValue: '',
+	    loadTop4: function(){
+	    	console.log('Top 4')
+	    	return m.request({
+	    		method: "GET",
+	            url: "_ah/api/tinypet/v2/top4/"
+	    	})
+	    	.then(function(result){
+    		 	Petition.listTop4 = result.items
+	         	console.log("got:",result.items)
+	    	})
+	    },
+	    loadLast4: function(){
+	    	console.log('Last 4')
+	    	return m.request({
+	    		method: "GET",
+	            url: "_ah/api/tinypet/v2/last4/"
+	    	})
+	    	.then(function(result){
+    		 	Petition.listLast4 = result.items
+	         	console.log("got:",result.items)
+	    	})
+	    },
+	    loadNew4: function(){
+	    	console.log('New 4')
+	    	return m.request({
+	    		method: "GET",
+	            url: "_ah/api/tinypet/v2/new4/"
+	    	})
+	    	.then(function(result){
+    		 	Petition.listNew4 = result.items
+	         	console.log("got:",result.items)
+	    	})
+	    },
+	    loadOld4: function(){
+	    	console.log('Old 4')
+	    	return m.request({
+	    		method: "GET",
+	            url: "_ah/api/tinypet/v2/old4/"
+	    	})
+	    	.then(function(result){
+    		 	Petition.listOld4 = result.items
+	         	console.log("got:",result.items)
+	    	})
+	    },
+	    loadList: function() {
+	    	console.log('Top 100..')
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/tinypet/v2/top100/"
+	        })
+	        .then(function(result) {
+	            Petition.listtop100 = result.items
+	        	console.log("got:",result.items)
+	        })
+	    },
+	    loadListVotants: function() {
+	    	console.log('Mes signatures')
+ 		    var data = {"currentUser": Petition.currentUser}
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/tinypet/v2/mesSignatures/"+'?access_token='+ encodeURIComponent(Petition.ID),
+	           	params: data,
+	        })
+	        .then(function(result) {
+	            Petition.listVotants = result.items
+	        	console.log("got:",result.items)
+	        })
+	    },
+	    loadListMesPetitions: function() {
+	    	console.log('Mes pétitions')
+	    	var data = {"currentUser": Petition.currentUser}
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/tinypet/v2/mesPetitions/"+'?access_token='+ encodeURIComponent(Petition.ID),
+	           	params: data,
+	        })
+	        .then(function(result) {
+	            Petition.listMesPetitions = result.items
+	        	console.log("got:",result.items)
+	        })
+	    },
+	    save: function(description,id) {
+	    	console.log("saving...",Petition)
+	    	var data={"titre":Petition.titre, "description":Petition.description, "currentUser":Petition.currentUser, "tags":Petition.tags}
+	        return m.request({
+	            method: "POST",
+	            url: "_ah/api/tinypet/v2/addPetition/"+'?access_token='+encodeURIComponent(Petition.ID),
+	            params: data,
+	        })
+	        .then(function(result) {
+	        	console.log("got:",result)
+	        	alert("Pétition Créée")
+	        	m.route.set("/home")
+	        })
+	    },
+ 	    sign: function(key) {
+	    	console.log("signing...",key)
+	    	var data={'id': key, 'currentUser': Petition.currentUser}
+	        return m.request({
+	            method: "POST",
+	            url: "_ah/api/tinypet/v2/signPetition"+'?access_token='+encodeURIComponent(Petition.ID),
+	            params: data,
+	        })
+	        .then(function(result) {
+	        	console.log("got:",result)
+	        	Petition.loadList()
+	        	alert("Signature prise en compte...");
+	        })
+	    },
+ 	    search: function() {
+	    	console.log("Recherche: ", Petition.searchValue)
+	    	var data = {"titre":Petition.searchValue}
+	    	return m.request({
+	    		method: "GET", 
+	    		url: "_ah/api/tinypet/v2/search/"+'?access_token='+encodeURIComponent(Petition.ID),
+	    		params: data,
+	    	})
+	    	.then(function(result){
+	    		if(result.items != null && response.items != undefined){
+	    		Petition.searchResult = result.items
+	    		m.route.set("/search")
+	    		}
+	    	})
+	    	.catch(e => {console.log("Rien", Petition.searchValue)})
+	    }, 
+	}
+
+var navbar={
+		view: function() {
+			return m('div', [
+				m('nav',{class:'navbar'},
+						m("ul",{},
+							m("li",{},m('div',{onclick: function(e) {m.route.set("/home")}},"TinyPetition")),
+							m("li",{},m('div',{onclick: function(e) {m.route.set("/create")}},"Créer une pétition")),
+							m("li",{},m('div',{
+								onclick: function(e) {
+									Petition.loadListMesPetitions(Petition.ID),
+								  	m.route.set("/yourCreation")}}
+									,"Mes petitions")),
+							m("li",{},m('div',{
+								onclick: function(e) {
+									Petition.loadListVotants(Petition.ID),
+								  	m.route.set("/yourSignature")}}
+									,"Mes signatures")),
+							m("li",{},m('div',{
+								onclick: function(e) {
+									Petition.loadList(Petition.ID),
+								  	m.route.set("/top100")}}
+									,"Top 100")),
+							m("li",{},m('div',{
+								onclick: function(e) {
+									gapi.auth2.getAuthInstance().signOut().then(function () {
+										console.log('User signed out.');
+							      		location.reload();
+							    	})
+							    }}
+								,"Se déconnecter")),
+								m("form", {}, 
+										m("input", {class: 'input is-rounded', type:'text', placeholder:'Rechercher', id:'search', 
+											onkeyup : function(e){
+												Petition.searchValue=e.target.value
+											}})
+										)
+								
+						)
+				),	
+			])
+		}
+}
+
+var AccueilView = {
+		oninit : function() {
+			Petition.loadTop4();
+			Petition.loadLast4();
+			Petition.loadNew4();
+			Petition.loadOld4();
+			},
+		view: function(){
+			return m('div', [
+				m('div', {}, m(navbar)),
+				m('br'),
+				m('div',{class: 'tile is-ancestor'},[
+		            m("div", {class: 'tile'}, 
+		            	m('div',{class:'tile is-child box'},
+					  		m('div',{class:'subtitle'},"Voici les 4 pétitions les plus signées"),
+					  		m('br'),
+					  		m('div', {class : "row"}, [
+					  			Petition.listTop4.map(function(item){
+					  				return m('div', {class: "col-sm-3"}, [
+					  					   	m('div', {class: 'card', style: 'width : 18rem;'}, [
+												m('div', {class: 'card-body'}, [
+													m('h5', {class: 'card-title'},"Titre : ", item.properties.titre),
+													m('p', {class: 'card-text'}, "Description : ", item.properties.description),
+													m('p', {class: 'card-text'}, "Nombre de votants : ", item.properties.nbvotants),
+													m('p', {class: 'card-text'}, "La date de création : ", item.properties.date),
+													m('p', {class: 'card-text'}, "Le créateur : ", item.properties.creator),
+													m('p', {class: 'card-text'}, "Les tags : ", item.properties.tags),
+													m('button',{
+														class: 'button btn-primary',
+														onclick: function(e) {
+															Petition.sign(item.key.name)
+														}
+													},"Signer"),
+											])
+										])
+					  				])
+					  			})
+					  		])
+						)
+					)
+				]),
+				m('br'),
+				m('div',{class: 'tile is-ancestor'},[
+		            m("div", {class: 'tile'}, 
+		            	m('div',{class:'tile is-child box'},
+					  		m('div',{class:'subtitle'},"Voici les 4 pétitions les moins signées"),
+					  		m('br'),
+					  		m('div', {class : "row"}, [
+					  			Petition.listLast4.map(function(item){
+					  				return m('div', {class: "col-sm-3"}, [
+					  					   	m('div', {class: 'card', style: 'width : 18rem;'}, [
+												m('div', {class: 'card-body'}, [
+													m('h5', {class: 'card-title'},"Titre : ", item.properties.titre),
+													m('p', {class: 'card-text'}, "Description : ", item.properties.description),
+													m('p', {class: 'card-text'}, "Nombre de votants : ", item.properties.nbvotants),
+													m('p', {class: 'card-text'}, "La date de création : ", item.properties.date),
+													m('p', {class: 'card-text'}, "Le créateur : ", item.properties.creator),
+													m('p', {class: 'card-text'}, "Les tags : ", item.properties.tags),
+													m('button',{
+														class: 'button btn-primary',
+														onclick: function(e) {
+															Petition.sign(item.key.name)
+														}
+													},"Signer"),
+											])
+										])
+					  				])
+					  			})
+					  		])
+						)
+					)
+				]),
+				m('br'),
+				m('div',{class: 'tile is-ancestor'},[
+		            m("div", {class: 'tile'}, 
+		            	m('div',{class:'tile is-child box'},
+					  		m('div',{class:'subtitle'},"Voici les 4 dernières pétitions"),
+					  		m('br'),
+					  		m('div', {class : "row"}, [
+					  			Petition.listNew4.map(function(item){
+					  				return m('div', {class: "col-sm-3"}, [
+					  					   	m('div', {class: 'card', style: 'width : 18rem;'}, [
+												m('div', {class: 'card-body'}, [
+													m('h5', {class: 'card-title'},"Titre : ", item.properties.titre),
+													m('p', {class: 'card-text'}, "Description : ", item.properties.description),
+													m('p', {class: 'card-text'}, "Nombre de votants : ", item.properties.nbvotants),
+													m('p', {class: 'card-text'}, "La date de création : ", item.properties.date),
+													m('p', {class: 'card-text'}, "Le créateur : ", item.properties.creator),
+													m('p', {class: 'card-text'}, "Les tags : ", item.properties.tags),
+								        			m('button',{
+														class: 'button btn-primary',
+														onclick: function(e) {
+															Petition.sign(item.key.name)
+														}
+													},"Signer"),
+											])
+										])
+					  				])
+					  			})
+					  		])
+						)
+					)
+				]),
+				m('br'),
+				m('div',{class: 'tile is-ancestor'},[
+		            m("div", {class: 'tile'}, 
+		            	m('div',{class:'tile is-child box'},
+					  		m('div',{class:'subtitle'},"Voici les 4 plus anciennes pétitions"),
+					  		m('br'),
+					  		m('div', {class : "row"}, [
+					  			Petition.listOld4.map(function(item){
+					  				return m('div', {class: "col-sm-3"}, [
+					  					   	m('div', {class: 'card', style: 'width : 18rem;'}, [
+												m('div', {class: 'card-body'}, [
+													m('h5', {class: 'card-title'},"Titre : ", item.properties.titre),
+													m('p', {class: 'card-text'}, "Description : ", item.properties.description),
+													m('p', {class: 'card-text'}, "Nombre de votants : ", item.properties.nbvotants),
+													m('p', {class: 'card-text'}, "La date de création : ", item.properties.date),
+													m('p', {class: 'card-text'}, "Le créateur : ", item.properties.creator),
+													m('p', {class: 'card-text'}, "Les tags : ", item.properties.tags),
+													m('button',{
+														class: 'button btn-primary',
+														onclick: function(e) {
+															Petition.sign(item.key.name)
+														}
+													},"Signer"),
+											])
+										])
+					  				])
+					  			})
+					  		])
+						)
+					)
+				])
+			])
+		}
+}
+
+var NouvellePetitionView={
+	view: function() {
+		return m('div',[
+	   		m("div", {},m(navbar)),
+	   		m("br"),
+			m('div',{class:'subtitle', style : "margin: 10px;"},"Créer une pétition"),
+			m("input[type=text][placeholder=Titre de la pétition]", {
+				class: 'input is-rounded',
+				style : "width : 40%; margin-left: 10px;",
+			 	oninput: function (e) {
+					Petition.titre=e.target.value
+					},
+			 	}),
+			m('br'),
+			m('br'),
+			m("textarea", {
+				class: 'textarea is-rounded',
+				style : "margin-left : 10px;",
+				placeholder: "Une description pour la pétition",
+				oninput: function (e){
+					Petition.description=e.target.value
+					},
+				}),
+			m('br'),
+			m('p', {style: "margin-left : 10px; font-size : 18px;"}, "Remplissez les tags pour la pétition en veillant à bien les séparer d'un point virgule"),
+			m("input[type=text][placeholder=Exemple : Ecologie; Cause animale]", {
+				class: 'input is-rounded',
+				style : "margin-left: 10px; margin-top : 5px;",
+			 	oninput: function (e) {
+					Petition.tags=e.target.value
+					},
+			 	}),
+			m('button',{
+				class: 'button is-link',
+				style : "margin-left: 10px; margin-top : 10px;",
+				onclick: function(e) {
+					Petition.save(Petition.description,Petition.ID)
+					}
+			   },"Créer"),
+			])
+	}	
+}
+
+
+var Top100PetitionListView = {
+  oninit: Petition.loadList,
+  view: function() {
+   	return m('div', [
+		m("div", {},m(navbar)),
+		m("br"),
+		m('div',{class: 'tile is-ancestor'},[
+            m("div", {class: 'tile'}, 
+            	m('div',{class:'tile is-child box'},
+			  		m('div',{class:'subtitle'},"Voici le Top 100 des pétitions les plus signées"),
+			  		m('br'),
+			  		m('table', {class:'table is-striped'},[
+			    		m('tr', [
+			      			m('th', {width:"10%"}, "Titre"),
+			      			m('th', {width:"10%"}, "Description"),
+			      			m('th', {width:"10%"}, "Nombre de signatures"),
+			      			m('th', {width: "10%"}, "Date"),
+			      			m('th', {width:"3%"}, "Signez"),
+			    		]),
+			    		Petition.listtop100.map(function(item) {
+			      			return m("tr", [
+		  	        			m('td', m('label', item.properties.titre)),
+		  	        			m('td', m('label', item.properties.description)),
+		  	        			m('td', m('label', item.properties.nbvotants)),
+		  	        			m('td', m('label', item.properties.date)),
+			        			m('button',{
+									class: 'button is-link',
+									onclick: function(e) {
+										Petition.sign(item.key.name)
+									}
+								},"Signer"),
+			      			])
+			   			})
+			   		])
+				)
+			)
+		])
+	 ])
+  }
+}
+
+var MyPetitionListView = {
+		  view: function() {
+		   	return m('div', [
+		   		   m("div", {},m(navbar)),
+		   		   m("br"),
+		           m('div',{class: 'tile is-ancestor'},[
+		               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},
+						  m('div',{class:'subtitle'},"Les pétitions que vous avez créées : "),
+					  		m('br'),
+					  		m('div', {class : "row"}, [
+					  			Petition.listMesPetitions.map(function(item){
+					  				return m('div', {class: "col-sm-3"}, [
+					  					   	m('div', {class: 'card', style: 'width : 18rem; margin-bot: 10px;'}, [
+												m('div', {class: 'card-body'}, [
+													m('h5', {class: 'card-title'},"Titre : ", item.properties.titre),
+													m('p', {class: 'card-text'}, "Description : ", item.properties.description),
+													m('p', {class: 'card-text'}, "Nombre de votants : ", item.properties.nbvotants),
+													m('p', {class: 'card-text'}, "La date de création : ", item.properties.date),
+													m('p', {class: 'card-text'}, "Le créateur : ", item.properties.creator),
+													m('p', {class: 'card-text'}, "Les tags : ", item.properties.tags),
+											])
+										])
+					  				])
+					  			})
+					  		])
+						   )
+			 		  )
+		  		]),
+		  	])
+		  }
+		}
+		
+var MySignatureListView = {
+		
+		  view: function() {
+		   	return m('div', [
+		   		   m("div", {},m(navbar)),
+		   		   m("br"),
+		           m('div',{class: 'tile is-ancestor'},[
+		               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},
+						  m('div',{class:'subtitle'},"Les pétitions que vous avez signées : "),
+					  		m('br'),
+					  		m('div', {class : "row"}, [
+					  			Petition.listVotants.map(function(item){
+					  				return m('div', {class: "col-sm-3"}, [
+					  					   	m('div', {class: 'card', style: 'width : 18rem;'}, [
+												m('div', {class: 'card-body'}, [
+													m('h5', {class: 'card-title'},"Titre : ", item.properties.titre),
+													m('p', {class: 'card-text'}, "Description : ", item.properties.description),
+													m('p', {class: 'card-text'}, "Nombre de votants : ", item.properties.nbvotants),
+													m('p', {class: 'card-text'}, "La date de création : ", item.properties.date),
+													m('p', {class: 'card-text'}, "Le créateur : ", item.properties.creator),
+													m('p', {class: 'card-text'}, "Les tags : ", item.properties.tags),
+											])
+										])
+					  				])
+					  			})
+					  		])
+						   )
+			 		  )
+		  		]),
+		  	])
+		  }
+		}
+
+var SearchResultListView = {
+		view: function() {
+		   	return m('div', [
+		   		   m("div", {},m(navbar)),
+		   		   m("br"),
+		           m('div',{class: 'tile is-ancestor'},[
+		               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},
+						  m('div',{class:'subtitle'},"Les résulats de la recherche: "),
+					  		m('br'),
+					  		m('div', {class : "row"}, [
+					  			Petition.searchResult.map(function(item){
+					  				return m('div', {class: "col-sm-3"}, [
+					  					   	m('div', {class: 'card', style: 'width : 18rem;'}, [
+												m('div', {class: 'card-body'}, [
+													m('h5', {class: 'card-title'},"Titre : ", item.properties.titre),
+													m('p', {class: 'card-text'}, "Description : ", item.properties.description),
+													m('p', {class: 'card-text'}, "Nombre de votants : ", item.properties.nbvotants),
+													m('p', {class: 'card-text'}, "La date de création : ", item.properties.date),
+													m('p', {class: 'card-text'}, "Le créateur : ", item.properties.creator),
+													m('p', {class: 'card-text'}, "Les tags : ", item.properties.tags),
+											])
+										])
+					  				])
+					  			})
+					  		])
+						   )
+			 		  )
+		  		]),
+		  	])
+		  }
+}
+function onSignIn(googleUser) {
+	  var petition = googleUser.getBasicProfile();
+	  Petition.currentUser = googleUser.getBasicProfile().getEmail();
+	  Petition.ID = googleUser.getAuthResponse().id_token;
+	  m.route.set("/home")
+	}
+
+var Login = {
+		  view: function() {
+		 	return m('div', {class:'container'}, [
+		      m("h1", {class: 'title'}, 'Une petite application de pétition'),
+		      m("p", {},  "Connectez vous ici :"),
+		      m("div", {
+		      	   "class":"g-signin2",
+		      	   "data-onsuccess": "onSignIn"}),
+		      m('br'),
+	      	  m("p", {}, "Si rien ne s'affiche, merci de recharger la page")
+		      ])
+		    }
+		}
+
+m.route(document.body, "/", {
+	  "/home" : { onmatch: function(){
+		  if (Petition.ID=="") {m.route.set("/")}
+      	  else return AccueilView
+	  }},
+	  "/create" : { onmatch: function(){
+		  if (Petition.ID=="") {m.route.set("/")}
+      	  else return NouvellePetitionView
+	  }},
+	  "/yourCreation" : { onmatch: function(){
+		  if (Petition.ID=="") {m.route.set("/")}
+      	  else return MyPetitionListView
+	  }},
+	  "/yourSignature" : { onmatch: function(){
+		  if (Petition.ID=="") {m.route.set("/")}
+      	  else return MySignatureListView
+	  }},
+	  "/top100" : { onmatch: function(){
+		  if (Petition.ID=="") {m.route.set("/")}
+      	  else return Top100PetitionListView
+	  }},
+	  "/search" : { onmatch: function(){
+		  if (Petition.ID=="") {m.route.set("/")}
+      	  else return SearchResultListView
+	  }},
+	  "/": Login
+	})
+	
+//m.mount(document.body, Container)	
+</script>
+</body>
+</html>

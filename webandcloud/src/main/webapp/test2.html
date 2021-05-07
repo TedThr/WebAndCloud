@@ -1,0 +1,99 @@
+<html>
+<head>
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id"
+	content="927375242383-t21v9ml38tkh2pr30m4hqiflkl3jfohl.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer
+	src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+
+<script src="https://unpkg.com/mithril/mithril.js"></script>
+
+
+</head>
+<body>
+	<script>
+	var Header = {
+			view : function(){
+				return m("header", [
+					m("div", {class : "container"}, [
+						m("div", {class : "title-div"},[
+							m(m.route.Link, {href: "/"}, [
+								m("p", {class : "title"}, "TinyPet")
+							])
+						]),
+						m("div", {class : "search-div"}, [
+							m("input", {
+								id : "searchbar",
+								placeholder : "Rechercher"
+							})
+						])
+					])
+				])
+			}
+			
+	}
+
+	
+var Profile={
+  view: function(){
+	return m('div', {class:'container'}, [
+  	  m("h1", {class: 'title'}, "name: "+Profile.name),
+	  m("h2", {class: 'subtitle'}, "email: "+Profile.email),
+	  m("button",{class:"button", onclick: function(e) { controller.callAddPetition}},"Créer une pétition")
+	])
+  }
+}
+
+
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  Profile.name=profile.getName();
+  Profile.email=profile.getEmail();
+  Profile.ID=googleUser.getAuthResponse().id_token;
+  Profile.url=profile.getImageUrl();
+  m.route.set("/home")
+}
+		
+var Login = {
+  view: function() {
+ 	return m('div', {class:'container'}, [
+      m("h1", {class: 'title'}, 'Page de connexion'),
+      m("div", {
+      	   "class":"g-signin2",
+      	   "data-theme":"dark",
+      	   "data-onsuccess": "onSignIn"}),
+      ])
+    }
+}
+
+var Home = {
+		view : function(){
+			return [m(Header) ,m(Profile)]
+		}
+	}
+
+
+m.route(document.body, "/home", {
+  "/home": { onmatch: function() {
+            	if (Profile.ID=="") {m.route.set("/login")}
+            	else return Home
+        		}},
+  "/login": Login
+})
+		
+	</script>
+</body>
+</html>
+
+

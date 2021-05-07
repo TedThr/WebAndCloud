@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tiny Petition</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer
+	src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+
+<script src="https://unpkg.com/mithril/mithril.js"></script>
+
+</head>
+<body>
+
+
+
+	<script>	
+
+// for the example
+var me="f1"
+
+	var navbar={
+		view : function(){
+			return m('div', [ 
+				m('nav'), {class:'navbar'},
+				m("ul", {},
+						m("li", {}, m('div', {onclick: function(e) {m.route.set("/Home")}}, "Tiny Petition")),
+						m("li", {}, m('div', {onclick: function(e) {m.route.set("/Create")}}, "Créer une pétition")),
+						m("li", {}, m('div', {onclick: function(e){
+							Petition.loadListCreator(Petition.ID),
+							m.route.set("/Yours")}},
+							"Vos pétitions")),
+						m("li", {}, m('div', {onclick: function(e){
+							gapi.auth2.getAuthInstance().signOut().then(function (){
+								console.log('User signed out');
+								location.reload();
+							}), 
+							}},"Déconnexion")),
+						)
+			])
+		}
+}
+
+var NouvellePetitionView = {
+		view: function() {
+			return m('div', [
+				m("div", {}, m(navbar)),
+				m('div', {class:'subtitle'}, "Créer une pétition"),
+				m("input[type=text][placeholder=Nom]", {
+					class : 'input is-rounded',
+					oninput: function(e) {addPetition.description=e.target.value},
+				}),
+				m("fieldset", {}, 
+						m("legend",{}, "Selectionnez les tags pour la pétition :"),
+						m("input[type=checkbox]", 
+						{
+							id:"ecologie",
+							value:"#ecolo",
+							onchange: function(e) {
+								if(e.checked){
+								addPetition.tags.push(e.target.value),
+								console.log("ajout",e.target.value)
+								}
+							else{
+								addPetition.tags.splice(addPetition.tags.indexOf(e.target.value),1),
+								console.log("retrait", e.target.value)
+								}
+							},
+						}),
+						m("label", {for:"nature"}, "#nature"),
+						m("input[type=checkbox]",
+								id:"sociale",
+								value:"#social",
+								onchange: function(e) {
+									if(e.checked){
+										addPetition.tags.push(e.target.value),
+										console.log("ajout",e.target.value)
+									}
+								else{
+									addPetition.tags.splice(addPetition.tags.indexOf(e.target.value),1),
+									console.log("retrait", e.target.value)
+									}
+									}
+								})	
+	])
+}
+
+var Hello = {
+   view: function() {
+   	return m('div', {class:'container'}, [
+           m("h1", {class: 'title'}, 'The TinyGram Post'),
+           m('div',{class: 'tile is-ancestor'},[
+               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(PostForm))),
+        	   m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(PostView))),
+           ])
+       ])
+   }
+}
+
+
+m.mount(document.body, Hello)	
+
+
+</script>
+</body>
+</html>
