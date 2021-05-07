@@ -12,7 +12,6 @@ Lien vers le github : https://github.com/TedThr/WebAndCloud
 
 
 Fonctionnalités implémentées :
-
  Dans ce qui suit, la liste des fonctionnalités implémentés pour la réalisation du projet :
 
 Créer une pétition (voir plusieurs)
@@ -28,17 +27,20 @@ Fonctionnalités opérationnels :
   Les fonctionnalités sont testées et nous avons vérifié si elles étaient scalables. Nous visons au maximum un temps inférieur à 500ms. Voici nos résultats : 
 
 Créer une pétition : 
-
+ ![CréerPet](http://lmsotfy.com/so.png) 
 
 Visualiser les pétitions créées : 
 
 Signer une pétition : 
+ ![SignerPet](http://lmsotfy.com/so.png) 
 
 
 Visualiser les pétitions signées :
+ ![SignedPet](http://lmsotfy.com/so.png) 
 
 
 Visualiser le top100 pétitions les plus signées :
+ ![top100](http://lmsotfy.com/so.png) 
 
 
 Fonctionnalités non opérationnels :
@@ -60,9 +62,9 @@ Capture d'écran des Tables :
 
 Datastore : entité Petition: 
 
-
-
-
+ ![tabPet1](http://lmsotfy.com/so.png) 
+ ![tabPet2](http://lmsotfy.com/so.png) 
+ ![tabPet3](http://lmsotfy.com/so.png) 
 
 Pour assurer le tri par date, nous avons décidé d’ajouter la date à la clé des pétitions la date du jour lors de la création. Nous avons repris exemple sur le code de notre professeur puisqu’il a bien spécifié qu’il était très utile d’avoir la date dans l’id d’une pétition. Également, pour être sûr que l’idée est unique, nous avons ajouté le nom de l’utilisateur qui créer la pétition dans l’Id, étant donné qu’un utilisateur ne pourra pas créer deux pétitions exactement au même moment, on est sûr que l’id sera unique.
 
@@ -77,9 +79,15 @@ Nous avons trouvé ce travail très intéressant. En effet, l’utilisation de G
 Annexes :
 
 Page de connexion: cliquer sur le bouton connexion puis renseigner votre mail
+ ![pageCo](http://lmsotfy.com/so.png) 
 
 
   Page d’accueil : arrivé à la page d'accueil, les fonctionnalités sur la barre de tache en fond noirs et avec une propositions des 4 pétitions les plus signés comme premier titre, les 4 pétitions les moins signés, les 4 dernières pétitions et enfin les 4 pétitions les plus anciennes.
+
+ ![paggAcc1](http://lmsotfy.com/so.png) 
+ ![paggAcc2](http://lmsotfy.com/so.png) 
+ ![paggAcc3](http://lmsotfy.com/so.png) 
+ ![paggAcc4](http://lmsotfy.com/so.png) 
 
 
 
